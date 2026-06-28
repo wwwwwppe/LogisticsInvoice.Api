@@ -35,7 +35,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseOracle(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddScoped<IBusinessPartyRepository, BusinessPartyRepository>();
 builder.Services.AddScoped<IBusinessPartyService, BusinessPartyService>();
