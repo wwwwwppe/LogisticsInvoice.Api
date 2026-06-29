@@ -1,0 +1,16 @@
+services:
+  oracle:
+    image: container-registry.oracle.com/database/express:21.3.0-xe
+    pull_policy: missing
+    container_name: logistics-invoice-oracle
+    ports:
+      - "1521:1521"
+    environment:
+      ORACLE_PWD: OracleAdmin123
+    volumes:
+      - logistics-invoice-oracle-data:/opt/oracle/oradata
+      - ./docker/oracle/startup:/opt/oracle/scripts/startup:ro
+    restart: unless-stopped
+
+volumes:
+  logistics-invoice-oracle-data:

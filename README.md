@@ -8,8 +8,9 @@
 
 - .NET 6（项目目标框架 `net6.0`）
 - ASP.NET Core Web API
-- Entity Framework Core 7.0.20
-- SQL Server LocalDB
+- Entity Framework Core 7
+- Oracle Entity Framework Core 7.21.13（ODP.NET）
+- Oracle Database Express Edition 21c（Docker）
 - Swagger / OpenAPI
 - 依赖注入、DTO 参数校验
 - 全局异常处理中间件
@@ -17,8 +18,9 @@
 
 ### 为什么这样选择
 
-- **SQL Server LocalDB**：当前 Windows 开发机已经安装，可直接运行，不需要 Docker、账号或额外数据库安装。
-- **EF Core 7**：仍支持 `net6.0`，并使用较新的 SQL Server 驱动依赖；项目运行目标仍是 .NET 6。
+- **Oracle Database**：与项目发起人的真实 ERP、发票、报表和 Oracle 维护经验更贴近，也便于练习企业系统中常见的 Oracle 数据类型、SQL 和后续 PL/SQL 场景。
+- **Oracle 官方 EF Core Provider**：`Oracle.EntityFrameworkCore 7.21.13` 支持 .NET 6，通过纯托管 ODP.NET 驱动访问 Oracle，不要求宿主机额外安装 Oracle Client。
+- **Docker 本地数据库**：开发机没有正在运行的 Oracle 服务，但已缓存 Oracle Database XE 21c 官方镜像，因此用独立容器和数据卷提供一致、可重复的开发环境。
 - **单体分层**：Controller、Service、Repository 职责清楚，足够支撑学习和面试展示，又没有引入微服务、DDD、CQRS 等当前不必要的复杂度。
 - **`EnsureCreated` 自动建库**：第一阶段降低启动门槛。正式迭代会切换为 EF Core Migration，以便管理数据库版本变化。
 
@@ -32,7 +34,8 @@
 - 客户/供应商启用/停用
 - DTO 数据校验及统一校验错误响应
 - 业务异常与未知异常的全局处理
-- SQL Server LocalDB 自动建库
+- Oracle Database XE 21c Docker 开发环境
+- Oracle 应用 Schema 自动建表
 
 客户和供应商共用 `BusinessParty`（业务往来单位）模型，通过 `Type` 区分：
 
@@ -52,6 +55,8 @@ LogisticsInvoice.Api/
 │  ├─ Dtos/              # 接口输入输出模型
 │  ├─ Common/            # 统一响应、分页、业务异常
 │  └─ Infrastructure/    # DbContext、全局中间件等基础设施
+├─ docker-compose.yml    # Oracle Database XE 本地环境
+├─ docker/oracle/        # 幂等 Schema 初始化脚本
 └─ docs/                 # 学习、交接与面试材料
 ```
 
@@ -59,19 +64,23 @@ LogisticsInvoice.Api/
 
 ### 环境要求
 
-- Windows
+- Windows、macOS 或 Linux
 - .NET 6 SDK，或能构建 `net6.0` 的更高版本 SDK
-- SQL Server LocalDB
+- Docker Desktop 或其他兼容 Docker Compose 的容器运行时
 
 本仓库的 `global.json` 使用本机已有的 .NET SDK 8.0.422 构建 `net6.0`。应用实际运行仍使用 .NET 6 运行时。
 
 ### 启动命令
 
 ```powershell
-sqllocaldb start MSSQLLocalDB
+docker pull container-registry.oracle.com/database/express:21.3.0-xe
+docker compose up -d oracle
+docker compose ps
 dotnet restore
 dotnet run --project .\src\LogisticsInvoice.Api
 ```
+
+等待 `docker compose ps` 中 Oracle 容器显示 `healthy` 后再启动 API。Oracle XE 镜像较大；如果本机尚未缓存，需要先在 Oracle Container Registry 接受许可并登录后拉取。后续启动会直接复用本地镜像和命名数据卷。
 
 浏览器打开：
 
@@ -85,7 +94,19 @@ https://localhost:7080/swagger
 GET https://localhost:7080/api/health
 ```
 
-第一次启动时，EF Core 会自动创建本地数据库 `LogisticsInvoiceDb`。
+容器首次启动会创建：
+
+- 服务名：`XEPDB1`
+- 应用 Schema：`logistics_invoice`
+- 本地开发密码：`LogisticsDev123`
+
+随后 EF Core 会在该 Schema 中自动创建 `BusinessParties` 表。以上密码只用于本地学习环境；部署到共享或生产环境时，必须通过 `ConnectionStrings__DefaultConnection` 等安全配置覆盖，不能继续使用仓库内的开发密码。
+
+停止数据库：
+
+```powershell
+docker compose stop oracle
+```
 
 ## 接口一览
 
@@ -156,7 +177,7 @@ GET /api/business-parties?keyword=物流&type=Customer&isEnabled=true&pageNumber
 
 ## 下一步计划
 
-1. 用 EF Core Migration 替换 `EnsureCreated`
+1. 用 Oracle EF Core Migration 替换 `EnsureCreated`
 2. 发票主表、明细和状态流转
 3. 用户登录、JWT 与角色权限
 4. 操作日志
