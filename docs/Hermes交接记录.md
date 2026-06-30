@@ -142,3 +142,11 @@ LogisticsInvoice.Api/
 - Oracle 上真实执行新增、关键词分页、修改为 `Both`、停用和不存在 ID 的 404，全部通过。
 - SQL*Plus 直接查到验收记录为 `Type=Both`、`IsEnabled=0`；验收后记录已删除，表内剩余 0 行。
 - 容器再次重启后仍为 `healthy`，幂等脚本没有重复创建用户，应用 Schema 和 `BusinessParties` 表均保留。
+
+## 2026-06-29｜进入用户动手练习模式
+
+- 新增 `docs/学习任务.md`。
+- 当前只布置“学习任务 1：按 ID 查询客户/供应商”。
+- `IBusinessPartyService` 已给出方法契约。
+- `BusinessPartyService.GetByIdAsync` 和 `BusinessPartiesController.GetById` 中的 `TODO(学习任务 1)` 是故意保留给用户完成的，不是待助手自动修复的缺陷。
+- 用户完成后应先评分和给出证据，不要直接覆盖其代码。
