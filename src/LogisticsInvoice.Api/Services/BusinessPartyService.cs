@@ -41,14 +41,20 @@ public class BusinessPartyService : IBusinessPartyService
         return ToDto(businessParty);
     }
 
-    public Task<BusinessPartyDto> GetByIdAsync(int id)
+    public async Task<BusinessPartyDto> GetByIdAsync(int id)
     {
         // TODO(学习任务 1):
         // 1. 根据 id 查询客户/供应商。
         // 2. 数据不存在时返回符合现有规范的 404 业务异常。
         // 3. 将 Entity 转换为 BusinessPartyDto 后返回。
         // 提示：优先观察本类已有的私有方法，避免复制同一段逻辑。
-        throw new NotImplementedException("请完成学习任务 1：按 ID 查询客户/供应商");
+        // var businessParty = _repository.GetByIdAsync(id);
+        // if (businessParty.Result is null) return Task.FromException<BusinessPartyDto>(new BusinessException(
+        //     $"未找到 ID 为 {id} 的客户/供应商",
+        //     StatusCodes.Status404NotFound));
+        // return Task.FromResult(ToDto(businessParty.Result));
+        var businessParty =await GetRequiredAsync(id);
+        return ToDto(businessParty);
     }
 
     public async Task<BusinessPartyDto> UpdateAsync(

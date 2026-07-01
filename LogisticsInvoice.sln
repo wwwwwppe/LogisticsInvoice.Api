@@ -1,8 +1,12 @@
-Microsoft Visual Studio Solution File, Format Version 12.00
+﻿Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LogisticsInvoice.Api", "src\LogisticsInvoice.Api\LogisticsInvoice.Api.csproj", "{787060A8-E0C5-49D7-B739-4AA6849F01F6}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{0A2224CF-3F1F-40B3-A19A-052FF4378466}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LogisticsInvoice.Api.Tests", "tests\LogisticsInvoice.Api.Tests\LogisticsInvoice.Api.Tests.csproj", "{5F63DEF3-6F57-4EE6-97B8-28376F16F780}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -14,5 +18,12 @@ Global
 		{787060A8-E0C5-49D7-B739-4AA6849F01F6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{787060A8-E0C5-49D7-B739-4AA6849F01F6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{787060A8-E0C5-49D7-B739-4AA6849F01F6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5F63DEF3-6F57-4EE6-97B8-28376F16F780}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5F63DEF3-6F57-4EE6-97B8-28376F16F780}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5F63DEF3-6F57-4EE6-97B8-28376F16F780}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5F63DEF3-6F57-4EE6-97B8-28376F16F780}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{5F63DEF3-6F57-4EE6-97B8-28376F16F780} = {0A2224CF-3F1F-40B3-A19A-052FF4378466}
 	EndGlobalSection
 EndGlobal

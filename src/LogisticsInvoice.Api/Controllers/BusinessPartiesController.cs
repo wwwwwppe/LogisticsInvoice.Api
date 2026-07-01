@@ -31,12 +31,13 @@ public class BusinessPartiesController : ControllerBase
     [HttpGet("{id:int}")]
     [ProducesResponseType(typeof(ApiResponse<BusinessPartyDto>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status404NotFound)]
-    public Task<ActionResult<ApiResponse<BusinessPartyDto>>> GetById(int id)
+    public async Task<ActionResult<ApiResponse<BusinessPartyDto>>> GetById(int id)
     {
         // TODO(学习任务 1):
         // 调用 Service，使用 ApiResponse<T> 包装结果，并返回 HTTP 200。
         // 不要在 Controller 中直接访问 Repository 或 DbContext。
-        throw new NotImplementedException("请完成学习任务 1：按 ID 查询客户/供应商");
+        var result =await _service.GetByIdAsync(id);
+        return Ok(ApiResponse<BusinessPartyDto>.Ok(result));
     }
 
     [HttpPut("{id:int}")]

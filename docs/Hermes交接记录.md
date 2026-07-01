@@ -150,3 +150,40 @@ LogisticsInvoice.Api/
 - `IBusinessPartyService` 已给出方法契约。
 - `BusinessPartyService.GetByIdAsync` 和 `BusinessPartiesController.GetById` 中的 `TODO(学习任务 1)` 是故意保留给用户完成的，不是待助手自动修复的缺陷。
 - 用户完成后应先评分和给出证据，不要直接覆盖其代码。
+
+## 2026-07-01｜学习任务 1 通过并进入单元测试
+
+### 当前完成
+
+- 用户完成 `GET /api/business-parties/{id}` 的 Controller 和 Service 实现。
+- 二次验收中构建 0 错误；Oracle 实测新增 201、存在 ID 查询 200、不存在 ID 查询统一返回 404。
+- 用户已理解 `async/await`、Service 层 404 规则复用及 Entity 到 DTO 的转换。
+- 新增 `LogisticsInvoice.Api.Tests` 测试项目，并提供一个查询成功的示例测试。
+
+### 当前学习任务
+
+- 学习任务 2：用户只完成 `GetByIdAsync_WhenMissing_Throws404BusinessException`。
+- 目标是掌握 xUnit、Moq、Arrange-Act-Assert、异步异常断言和依赖调用验证。
+- 完成后仍需先运行测试并评分，不要直接替用户填写 TODO。
+
+### 暴露出的知识短板
+
+- 曾用 `.Result` 同步阻塞异步查询。
+- 曾绕过已有的 `GetRequiredAsync`，导致 null 进入 DTO 映射并把预期 404 变成 500。
+- 可空引用警告与“让映射方法接受 null”之间的关系还需要巩固。
+- 已完成代码中的 TODO、旧注释、空格和文件结尾仍需主动清理。
+
+### 下一步建议
+
+1. 完成 Service 404 分支单元测试。
+2. 再学习 EF Core Migration，逐步替换 `EnsureCreated`。
+3. 随后进入发票实体、金额精度和状态流转。
+
+### 可以写进简历的内容
+
+- 暂时只能描述已实现统一异常处理和客户/供应商查询；单元测试能力需等任务 2 真正完成后再写。
+
+### 不能夸大的风险点
+
+- 当前只有一个示例测试，尚不能表述为建立了完整自动化测试体系。
+- 本地 Oracle CRUD 验证不等同于生产 Oracle 性能调优经验。
